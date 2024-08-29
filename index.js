@@ -1,226 +1,100 @@
 'use strict';
 
-console.log("hello world")
+// 所有的标签
+const specifiedTags = ['hidden'];
 
-// 在 Hexo 插件中处理传入的参数时，可以利用 args 来获取传入的参数，而 content 用来获取标签中的内容。你可以解析 args 以获取每个参数的键值对。以下是一个示例，展示了如何实现
+// ---------------------------------------------------------------------------------------------------------------
 
-hexo.extend.tag.register(
-  "1tag",
-  function (args, content) {
-    // 初始化一个对象来存储参数
-    let params = {};
+// 标签主函数
 
-    // 遍历 args 数组
-    args.forEach((arg) => {
-      // 使用 ':' 分割每个参数并存储到对象中
-      let [key, value] = arg.split(":");
-      if (key && value) {
-        params[key] = value;
-      }
-    });
+// 隐藏文本
+// {% hidden 这世界就是个错误！ type:blur title:字符串 %} 
 
-    // 你可以通过 params 对象访问参数
-    let var1 = params.var1; // "123"
-    let var2 = params.var2; // "321"
-
-    // 处理 content
-    // let contentText = content; // 可以在此处理标签内的内容
-    // 换行
-    let contentText = content.replace(/\n/g, "<br>");
-
-    // 返回生成的内容
-    return `<div>Var1: ${var1}, Var2: ${var2}, Content: ${contentText}</div>`;
-  },
-  { ends: true }
-);
-
-// ---------------------------------------------------------------------------------------------------
-
-// 自闭合标签
-// {% bihetag var1:123 var2:321 %}
-hexo.extend.tag.register(
-  "bihetag",
-  function (args) {
-    let params = {};
-    args.forEach((arg) => {
-      let [key, value] = arg.split(":");
-      if (key && value) {
-        params[key] = value;
-      }
-    });
-
-    let var1 = params.var1; // "123"
-    let var2 = params.var2; // "321"
-
-    return `<div>Var1: ${var1}, Var2: ${var2}</div>`;
-  },
-  { ends: false } // No content, so ends: false
-);
-
-
-// --------------------------------------------------------------------------------------------------
-
-// 带内容块的标签
-// {% nobubitag var1:123 var2:321 %}This is content{% endnobubitag %}
-
-hexo.extend.tag.register(
-  "nobubitag",
-  function (args, content) {
-    let params = {};
-    args.forEach((arg) => {
-      let [key, value] = arg.split(":");
-      if (key && value) {
-        params[key] = value;
-      }
-    });
-
-    let var1 = params.var1; // "123"
-    let var2 = params.var2; // "321"
-    let contentText = content; // "This is content"
-
-    return `<div>Var1: ${var1}, Var2: ${var2}, Content: ${contentText}</div>`;
-  },
-  { ends: true } // With content, so ends: true
-);
-
-
-
-// ------------------------------------------------------------------------------------
- 
-// {% titletag var1:123 我是内 容 var2:321 我也是 %}
-
-hexo.extend.tag.register(
-  "titletag",
-  function (args) {
-    let content = ""; // 用来存储标签内容
-    let params = {
-      var1: "默认值", // 为 var1 设置默认值
-      var2: "" // 初始化 var2
-    };
-
-    // 遍历 args 数组
-    args.forEach((arg) => {
-      if (arg.includes(":")) {
-        // 使用 ':' 分割并存储到 params 对象中
-        let [key, value] = arg.split(":");
-        if (key && value) {
-          params[key] = value;
-        }
-      } else {
-        // 如果没有 ':'，则认为是内容
-        content += arg + " ";
-      }
-    });
-
-    content = content.trim(); // 去除内容两端的多余空格
-
-    // 现在可以访问内容和参数
-    let var1 = params.var1; // 如果未设置 var1，则为 "默认值"
-    let var2 = params.var2; // 如果未设置 var2，则为空字符串
-
-    // 返回生成的内容
-    return `<div>Content: ${content}, Var1: ${var1}, Var2: ${var2}</div>`;
-  },
-  { ends: false } // 标签不需要闭合
-);
-
-
-// ------------------------------------------------------------------------
-
-// {% tagcontenttag content %}
-
-hexo.extend.tag.register(
-  "tagcontenttag",
-  function (args) {
-    let content = args
-    return `<div>tagcontent：${content}</div>`;
-  },
-  { ends: false } // No content, so ends: false
-);
-
-// ------------------------------------------------------------------------
-
-// {% contenttag %}爱了爱了{% endcontenttag %}
-
-hexo.extend.tag.register(
-  "contenttag",
-  function (args,content) {
-    // 替换换行符为 <br> 标签
-    let contentText = content.replace(/\n/g, "<br>");
-    return `<div>tagcontent：${contentText}</div>`;
-  },
-  { ends: true } // No content, so ends: false
-);
-
-
-
-
-
-
-
-
-
-
-
-//  'hello' 的短代码
-
-function tag_hello(args) {
-  return '<p>hello world</p>';
-};
-
-
-
-hexo.extend.tag.register(
-  "test",
-  function (args) {
-    let params = {};
-    args.forEach((arg) => {
-      let [key, value] = arg.split(":");
-      if (key && value) {
-        params[key] = value;
-      }
-    });
-
-    let var1 = params.var1; // "123"
-    let var2 = params.var2; // "321"
-
-    return `<div>Var1: ${var1}, Var2: ${var2}</div>`;
-  },
-  { ends: false } // No content, so ends: false
-);
-
-
-// 注册
-
-// hello
-hexo.extend.tag.register('hello', tag_hello ,{ ends: false });
-
-
-
-// -------------------------------------------------------------------------------------
-
-// import fetch from 'node-fetch';
-
-hexo.extend.tag.register('github_card', async function(args) {
-  const username = args[0];
-
-  // GitHub API 请求
-  const response = await fetch(`https://api.github.com/users/${username}`);
-  if (!response.ok) {
-    return `<p>Unable to fetch GitHub data for ${username}</p>`;
-  }
+function hidden(args) {
+  let content = ""; // 用来存储标签内容
+  let params = {
+    type: "blur", // 默认值
+    title: ""
+  };
   
-  const data = await response.json();
+  // 遍历 args 数组
+  args.forEach((arg) => {
+    if (arg.includes(":")) {
+      // 使用 ':' 分割并存储到 params 对象中
+      let [key, value] = arg.split(":");
+      if (key && value) {
+        params[key] = value;
+      }
+    } else if (!content) {
+      // 第一个没有 ':' 的部分认为是内容
+      content = arg;
+    }
+  });
 
-  // 生成 HTML 用户卡片
-  return `
-    <div class="github-card">
-      <img src="${data.avatar_url}" alt="${data.login}" width="64px" height="64px" />
-      <h3>${data.login}</h3>
-      <p>${data.bio || ''}</p>
-      <a href="${data.html_url}" target="_blank">View Profile</a>
-    </div>
-  `;
-}, {async: true});
+  let contentText = content.trim();
+  let type = params.type;
+  let title = params.title;
+
+  if (type != "blur" && type != "background") {
+    console.log('\x1B[31m%s\x1B[0m', `hexo-k-shortcode: khide type ERROR，type=${type}`);
+    return `hidden type ERROR `;
+  }
+  console.log('\x1B[31m%s\x1B[0m', `hexo-k-shortcode: type=${type}`);
+  return `<span class="hidden-text hidden-texthidden-text-${type}" title="${title}">${contentText}</span>`;
+}
+
+// -----------------------------------------------------------------------------------------------------------------------
+
+// 注入标签函数
+function tagfun(){
+hexo.extend.tag.register("hidden", hidden, {ends: false});
+}
+
+//------------------------------------------------------------------------------------------------------------------------
+// 注入 css
 
 
+const path = require('path');
+const fs = require('fs');
+
+// 全局变量，用于存储是否存在指定的标签
+let hasTags = false;
+
+
+// 注册标签
+specifiedTags.forEach(tag => {
+  tagfun();
+});
+
+hexo.extend.filter.register('before_generate', function() {
+  const srcPath = path.join(__dirname, 'lib/k-style.css');
+  const destPath = path.join(hexo.public_dir, 'css/k-style.css');
+
+  // 确保目标目录存在
+  fs.mkdirSync(path.dirname(destPath), { recursive: true });
+
+  // 复制文件
+  fs.copyFileSync(srcPath, destPath);
+});
+
+hexo.extend.filter.register('after_render:html', function(str, data) {
+  if (hasTags) {
+    // 注入 CSS 链接到 </head> 之前
+    const cssLink = '<link rel="stylesheet" href="/css/k-style.css">';
+    str = str.replace('</head>', `${cssLink}\n</head>`);
+  }
+
+  return str;
+});
+
+// 检查页面是否包含指定的标签
+hexo.extend.filter.register('before_post_render', function(data) {
+  specifiedTags.forEach(tag => {
+    if (data.content.includes(`{% ${tag} `)) {
+      hasTags = true;
+      return false; // 结束循环
+    }
+  });
+
+  return data;
+});
