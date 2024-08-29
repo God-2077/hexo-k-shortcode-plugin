@@ -45,10 +45,10 @@ function hidden(args) {
 
 // -----------------------------------------------------------------------------------------------------------------------
 
-// 注入标签函数
-function tagfun(){
+// 注入标签
+
 hexo.extend.tag.register("hidden", hidden, {ends: false});
-}
+
 
 //------------------------------------------------------------------------------------------------------------------------
 // 注入 css
@@ -62,9 +62,9 @@ let hasTags = false;
 
 
 // 注册标签
-specifiedTags.forEach(tag => {
-  tagfun();
-});
+// specifiedTags.forEach(tag => {
+//   tagfun();
+// });
 
 hexo.extend.filter.register('before_generate', function() {
   const srcPath = path.join(__dirname, 'lib/k-style.css');
