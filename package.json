@@ -1,24 +1,23 @@
 {
-    "name": "hexo-k-shortcode-plugin",
-    "version": "1.0.0",
-    "description": "A simple shortcode plugin for Hexo",
-    "main": "index.js",
-    "scripts": {
-      "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "repository": {
-      "type": "git",
-      "url": "git+https://github.com/God-2077/hexo-k-shortcode-plugin.git"
-    },
-    "keywords": [
-      "hexo",
-      "shortcode"
-    ],
-    "author": "kissablecho",
-    "license": "MIT",
-    "bugs": {
-      "url": "https://github.com/God-2077/hexo-k-shortcode-plugin/issues"
-    },
-    "homepage": "https://github.com/God-2077/hexo-k-shortcode-plugin#readme"
-  }
-  
+  "name": "hexo-k-shortcode-plugin",
+  "version": "1.0.0",
+  "description": "A shortcode plugin for Hexo",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/God-2077/hexo-k-shortcode-plugin.git"
+  },
+  "keywords": [
+    "hexo",
+    "shortcode"
+  ],
+  "author": "kissablecho",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/God-2077/hexo-k-shortcode-plugin/issues"
+  },
+  "homepage": "https://github.com/God-2077/hexo-k-shortcode-plugin#readme"
+}
