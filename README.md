@@ -11,7 +11,7 @@
 安装插件
 
 ```bash
-npm install hexo-k-shortcode-plugin
+npm install hexo-k-shortcode-plugin --save
 ```
 
 然后就在文章或页面输入你的代码
