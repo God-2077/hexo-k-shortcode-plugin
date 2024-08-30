@@ -1,6 +1,6 @@
 {
   "name": "hexo-k-shortcode-plugin",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A shortcode plugin for Hexo",
   "main": "index.js",
   "scripts": {
