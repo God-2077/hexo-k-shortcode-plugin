@@ -18,3 +18,42 @@
 	color: inherit;
 	border-radius: 0px;
 }
+/* 标签 */
+
+.label {
+    font-size: 88%;
+    font-weight: 600;
+    line-height: 1;
+    display: inline-block;
+    padding: .35rem .375rem;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    text-align: center;
+    vertical-align: baseline;
+    white-space: nowrap;
+    border-radius: .25rem
+}
+.label-color-round {
+    padding-right: .875em;
+    padding-left: .875em;
+    border-radius: 10rem
+}
+.label-color-indigo {
+    color: #2643e9;
+    background-color: rgba(203, 210, 246, .5);
+}
+.label-color-green {
+    color: #1aae6f;
+    background-color: rgba(203, 210, 246, .5);
+}
+.label-color-red {
+    color: #f80031;
+    background-color: rgba(203, 210, 246, .5);
+}
+.label-color-blue {
+    color: #03acca;
+    background-color: rgba(203, 210, 246, .5);
+}
+.label-color-orange {
+    color: #ff3709;
+    background-color: rgba(203, 210, 246, .5);
+}

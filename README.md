@@ -37,3 +37,34 @@ npm install hexo-k-shortcode-plugin --save
 | type   | blur/background | blur   | 隐藏的形式 (模糊/黑条)     | 否       |
 | color  | 字符串          | 无     | 鼠标移上一段时间后显示的话 | 否       |
 | show   | 字符串          | true   | 隐藏效果消除，显示文本     | 否       |
+
+#### 示例
+
+```md
+{% hidden 这世界就是个错误！ type:blur title:这世界就是个错误！ show:false %} 
+```
+
+### 标签
+
+#### 介绍
+
+该短代码可以插入一个标签。
+
+#### 用法
+
+```md
+{% label 内容 参数名:参数%}
+```
+
+#### 参数
+
+| 参数名 | 可选值                       | 默认值 | 解释                  | 是否必须 |
+| ------ | ---------------------------- | ------ | --------------------- | -------- |
+| color  | indigo/green/red/blue/orange | indigo | 标签颜色              | 否       |
+| shape  | square/round                 | square | 标签形状（方形/圆形） | 否       |
+
+#### 示例
+
+```md
+{% label 这世界就是个错误！ color:indigo shape:square %}
+```

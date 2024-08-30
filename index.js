@@ -52,11 +52,50 @@ function hidden(args) {
   return `<span class="hidden-text hidden-texthidden-text-${type} hidden-texthidden-text-${show}" title="${title}">${contentText}</span>`;
 }
 
+// 标签
+// {% label 标签 color:indigo shape:round %}
+
+function label(args){
+  let content = "";
+  let params = {
+    color: "indigo",
+    shape: "square"
+  };
+  args.forEach((arg) => {
+    if (arg.includes(":")) {
+      let [key, value] = arg.split(":");
+      if (key && value) {
+        params[key] = value;
+      }
+    } else if (!content) {
+      content = arg;
+    }
+  });
+  let contentText = content.trim();
+  let color = params.color;
+  let shape =params.shape;
+
+  const arcolor = ["indigo","green","red","blue","orange",];
+  const arshape = ["square","round"];
+  if (!arcolor.includes(color)) {
+    console.log('\x1B[31m%s\x1B[0m', `hexo-k-shortcode: label parameter color ERROR, color=${color}`);
+    return `hexo-k-shortcode: label parameter color ERROR, color=${color}`
+  }
+  if (!arshape.includes(shape)) {
+    console.log('\x1B[31m%s\x1B[0m', `hexo-k-shortcode: label parameter shape ERROR, color=${shape}`);
+    return `hexo-k-shortcode: label parameter shape ERROR, color=${shape}`
+  }
+
+  if (kdebug){console.log('\x1B[31m%s\x1B[0m', `hexo-k-shortcode: label contentText=${contentText}, color=${color}, shape=${shape},`);}
+  return `<span class="label label-color-${color} label-color-${shape}">${contentText}</span>`
+}
+
 // -----------------------------------------------------------------------------------------------------------------------
 
 // 注入标签函数
 
 hexo.extend.tag.register("hidden", hidden, {ends: false});
+hexo.extend.tag.register("label", label, {ends: false});
 
 
 //------------------------------------------------------------------------------------------------------------------------
