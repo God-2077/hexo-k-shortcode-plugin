@@ -1,20 +1,23 @@
 'use strict';
 
-// 所有的标签
-const specifiedTags = ['hidden'];
 
+let kdebug = hexo.config.hexo_k_shortcode_plugin?.debug || false;
+if (kdebug){
+  console.log('\x1B[31m%s\x1B[0m',`hexo-k-shortcode-plugin-debug:${kdebug}`)
+}
 // ---------------------------------------------------------------------------------------------------------------
 
 // 标签主函数
 
 // 隐藏文本
-// {% hidden 这世界就是个错误！ type:blur title:字符串 %} 
+// {% hidden 这世界就是个错误！ type:blur title:字符串 show:true %} 
 
 function hidden(args) {
   let content = ""; // 用来存储标签内容
   let params = {
     type: "blur", // 默认值
-    title: ""
+    title: "",
+    show: "true"
   };
   
   // 遍历 args 数组
@@ -34,18 +37,24 @@ function hidden(args) {
   let contentText = content.trim();
   let type = params.type;
   let title = params.title;
+  let show = params.show
 
   if (type != "blur" && type != "background") {
-    console.log('\x1B[31m%s\x1B[0m', `hexo-k-shortcode: khide type ERROR，type=${type}`);
-    return `hidden type ERROR `;
+    console.log('\x1B[31m%s\x1B[0m', `hexo-k-shortcode: khide parameter type ERROR, type=${type}`);
+    return `hidden parameter type ERROR `;
   }
-  console.log('\x1B[31m%s\x1B[0m', `hexo-k-shortcode: type=${type}`);
-  return `<span class="hidden-text hidden-texthidden-text-${type}" title="${title}">${contentText}</span>`;
+  if (show != "true" && show != "false") {
+    console.log('\x1B[31m%s\x1B[0m', `hexo-k-shortcode: khide parameter show, show=${show}`);
+    return `hidden parameter show ERROR `;
+  }
+
+  if (kdebug){console.log('\x1B[31m%s\x1B[0m', `hexo-k-shortcode: type=${type}, title=${title}, show=${show}`);}
+  return `<span class="hidden-text hidden-texthidden-text-${type} hidden-texthidden-text-${show}" title="${title}">${contentText}</span>`;
 }
 
 // -----------------------------------------------------------------------------------------------------------------------
 
-// 注入标签
+// 注入标签函数
 
 hexo.extend.tag.register("hidden", hidden, {ends: false});
 
@@ -57,14 +66,6 @@ hexo.extend.tag.register("hidden", hidden, {ends: false});
 const path = require('path');
 const fs = require('fs');
 
-// 全局变量，用于存储是否存在指定的标签
-let hasTags = false;
-
-
-// 注册标签
-// specifiedTags.forEach(tag => {
-//   tagfun();
-// });
 
 hexo.extend.filter.register('before_generate', function() {
   const srcPath = path.join(__dirname, 'lib/k-style.css');
@@ -77,24 +78,10 @@ hexo.extend.filter.register('before_generate', function() {
   fs.copyFileSync(srcPath, destPath);
 });
 
-hexo.extend.filter.register('after_render:html', function(str, data) {
-  if (hasTags) {
-    // 注入 CSS 链接到 </head> 之前
-    const cssLink = '<link rel="stylesheet" href="/css/k-style.css">';
-    str = str.replace('</head>', `${cssLink}\n</head>`);
-  }
+// 全局注入
 
-  return str;
-});
-
-// 检查页面是否包含指定的标签
-hexo.extend.filter.register('before_post_render', function(data) {
-  specifiedTags.forEach(tag => {
-    if (data.content.includes(`{% ${tag} `)) {
-      hasTags = true;
-      return false; // 结束循环
-    }
-  });
-
-  return data;
-});
+hexo.extend.injector.register(
+  "head_end", 
+  '<link rel="stylesheet" href="/css/k-style.css">',
+  "default"
+);

@@ -1,10 +1,11 @@
+/* 隐藏文本 */
 .hidden-text {
 	transition: all 0.3s ease;
 }
 .hidden-texthidden-text-blur {
 	filter: blur(4px);
 }
-.hidden-texthidden-text-blur:hover {
+.hidden-texthidden-text-true:hover {
 	filter: blur(0px);
 }
 .hidden-texthidden-text-background {
@@ -12,7 +13,7 @@
 	color: transparent;
 	border-radius: 1px;
 }
-.hidden-texthidden-text-background:hover {
+.hidden-texthidden-text-false:hover {
 	background: transparent;
 	color: inherit;
 	border-radius: 0px;
