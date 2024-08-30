@@ -40,15 +40,15 @@ function hidden(args) {
   let show = params.show
 
   if (type != "blur" && type != "background") {
-    console.log('\x1B[31m%s\x1B[0m', `hexo-k-shortcode: khide parameter type ERROR, type=${type}`);
-    return `hidden parameter type ERROR `;
+    console.log('\x1B[31m%s\x1B[0m', `hexo-k-shortcode: hidden parameter type ERROR, type=${type}`);
+    return `hexo-k-shortcode: hidden parameter type ERROR, type=${type}`;
   }
   if (show != "true" && show != "false") {
-    console.log('\x1B[31m%s\x1B[0m', `hexo-k-shortcode: khide parameter show, show=${show}`);
-    return `hidden parameter show ERROR `;
+    console.log('\x1B[31m%s\x1B[0m', `hexo-k-shortcode: hidden parameter show ERROR, show=${show}`);
+    return `hexo-k-shortcode: hidden parameter show ERROR, show=${show}`;
   }
 
-  if (kdebug){console.log('\x1B[31m%s\x1B[0m', `hexo-k-shortcode: type=${type}, title=${title}, show=${show}`);}
+  if (kdebug){console.log('\x1B[31m%s\x1B[0m', `hexo-k-shortcode: hidden contentText=${contentText}, type=${type}, title=${title}, show=${show}`);}
   return `<span class="hidden-text hidden-texthidden-text-${type} hidden-texthidden-text-${show}" title="${title}">${contentText}</span>`;
 }
 
