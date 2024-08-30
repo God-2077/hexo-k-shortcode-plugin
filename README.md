@@ -41,8 +41,16 @@ npm install hexo-k-shortcode-plugin --save
 #### 示例
 
 ```md
-{% hidden 这世界就是个错误！ type:blur title:这世界就是个错误！ show:false %} 
+{% hidden 这世界就是个错误！ type:blur title:鼠标停留会有提示 show:true %} 
+<br />
+{% hidden 这世界就是个错误！ type:background show:true %}
+<br />
+{% hidden 这世界就是个错误！ type:blur title:这世界就是个错误！ %} 
 ```
+
+![隐藏文本示例(鼠标不见了)](https://github.com/user-attachments/assets/2941cd16-d86b-4ff4-92e5-e05b4689c8e1)
+
+
 
 ### 标签
 
@@ -66,5 +74,15 @@ npm install hexo-k-shortcode-plugin --save
 #### 示例
 
 ```md
-{% label 这世界就是个错误！ color:indigo shape:square %}
+## 方形
+
+{% label 默认标签 %} {% label 靛蓝标签 color:indigo %} {% label 绿色标签 color:green %} {% label 红色标签 color:red %} {% label 蓝色标签 color:blue %} {% label 橙色标签 color:orange %}
+
+## 圆形
+
+{% label 靛蓝标签 color:indigo shape:round %} {% label 绿色标签 color:green shape:round %} {% label 红色标签 color:red shape:round %} {% label 蓝色标签 color:blue shape:round %} {% label 橙色标签 color:orange shape:round %}
 ```
+
+![image](https://github.com/user-attachments/assets/2cea7cca-7c01-44db-b79d-e9979cdc5ff1)
+
+
