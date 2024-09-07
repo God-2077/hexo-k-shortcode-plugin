@@ -1,22 +1,22 @@
 /* 隐藏文本 */
 .hidden-text {
 	transition: all 0.3s ease;
+	user-select: none;
 }
 .hidden-texthidden-text-blur {
 	filter: blur(4px);
-}
-.hidden-texthidden-text-true:hover {
-	filter: blur(0px);
 }
 .hidden-texthidden-text-background {
 	background: #000;
 	color: transparent;
 	border-radius: 1px;
 }
-.hidden-texthidden-text-false:hover {
+.hidden-texthidden-text-true:hover {
+	filter: blur(0px);
 	background: transparent;
 	color: inherit;
 	border-radius: 0px;
+	user-select: text;
 }
 /* 标签 */
 
