@@ -1,10 +1,28 @@
 'use strict';
 
+// ------------------------------------------------------------------------------------------------------
+// 辅助函数
+
+function kdebuglog(color,text) {
+  if (color=='yellow') {
+    console.log('\x1B[33m%s\x1B[0m',text)
+  }
+  if (color=='red') {
+    console.log('\x1B[31m%s\x1B[0m',text)
+  }
+  if (color=='green') {
+    console.log('\x1B[32m%s\x1B[0m',text)
+  }
+}
+
+// ------------------------------------------------------------------------------------------------------
+// 初始化
 
 let kdebug = hexo.config.hexo_k_shortcode_plugin?.debug || false;
 if (kdebug){
-  console.log('\x1B[31m%s\x1B[0m',`hexo-k-shortcode-plugin-debug:${kdebug}`)
+  kdebuglog('green',`hexo-k-shortcode-plugin-debug:${kdebug}`)
 }
+
 // ---------------------------------------------------------------------------------------------------------------
 
 // 标签主函数
@@ -40,15 +58,15 @@ function hidden(args) {
   let show = params.show
 
   if (type != "blur" && type != "background") {
-    console.log('\x1B[31m%s\x1B[0m', `hexo-k-shortcode: hidden parameter type ERROR, type=${type}`);
+    kdebuglog('red', `hexo-k-shortcode: hidden parameter type ERROR, type=${type}`);
     return `hexo-k-shortcode: hidden parameter type ERROR, type=${type}`;
   }
   if (show != "true" && show != "false") {
-    console.log('\x1B[31m%s\x1B[0m', `hexo-k-shortcode: hidden parameter show ERROR, show=${show}`);
+    kdebuglog('red', `hexo-k-shortcode: hidden parameter show ERROR, show=${show}`);
     return `hexo-k-shortcode: hidden parameter show ERROR, show=${show}`;
   }
 
-  if (kdebug){console.log('\x1B[31m%s\x1B[0m', `hexo-k-shortcode: hidden contentText=${contentText}, type=${type}, title=${title}, show=${show}`);}
+  if (kdebug){kdebuglog('green', `hexo-k-shortcode: hidden contentText=${contentText}, type=${type}, title=${title}, show=${show}`);}
   return `<span class="hidden-text hidden-texthidden-text-${type} hidden-texthidden-text-${show}" title="${title}">${contentText}</span>`;
 }
 
@@ -78,15 +96,15 @@ function label(args){
   const arcolor = ["indigo","green","red","blue","orange",];
   const arshape = ["square","round"];
   if (!arcolor.includes(color)) {
-    console.log('\x1B[31m%s\x1B[0m', `hexo-k-shortcode: label parameter color ERROR, color=${color}`);
+    kdebuglog('red', `hexo-k-shortcode: label parameter color ERROR, color=${color}`);
     return `hexo-k-shortcode: label parameter color ERROR, color=${color}`
   }
   if (!arshape.includes(shape)) {
-    console.log('\x1B[31m%s\x1B[0m', `hexo-k-shortcode: label parameter shape ERROR, color=${shape}`);
+    kdebuglog('red', `hexo-k-shortcode: label parameter shape ERROR, color=${shape}`);
     return `hexo-k-shortcode: label parameter shape ERROR, color=${shape}`
   }
 
-  if (kdebug){console.log('\x1B[31m%s\x1B[0m', `hexo-k-shortcode: label contentText=${contentText}, color=${color}, shape=${shape},`);}
+  if (kdebug){kdebuglog('\x1B[31m%s\x1B[0m', `hexo-k-shortcode: label contentText=${contentText}, color=${color}, shape=${shape},`);}
   return `<span class="label label-color-${color} label-color-${shape}">${contentText}</span>`
 }
 
