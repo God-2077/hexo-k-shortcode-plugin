@@ -14,6 +14,16 @@ function kdebuglog(color,text) {
     console.log('\x1B[32m%s\x1B[0m',text)
   }
 }
+// 全局页面字符串替换
+hexo.extend.filter.register('after_render:html', function (html) {
+  const kreplace = this.config.kreplace || [];
+  
+  kreplace.forEach(([search, replace]) => {
+    html = html.replace(new RegExp(search, 'g'), replace);
+  });
+
+  return html;
+});
 
 // ------------------------------------------------------------------------------------------------------
 // 初始化
