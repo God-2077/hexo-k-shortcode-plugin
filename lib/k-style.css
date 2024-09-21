@@ -1,7 +1,8 @@
 /* 隐藏文本 */
 .hidden-text {
 	transition: all 0.3s ease;
-	user-select: none;
+    -webkit-user-select: text;
+	user-select: text;
 }
 .hidden-texthidden-text-blur {
 	filter: blur(4px);
@@ -11,12 +12,17 @@
 	color: transparent;
 	border-radius: 1px;
 }
-.hidden-texthidden-text-true:hover {
+.hidden-texthidden-text-blur.hidden-texthidden-text-true:hover {
 	filter: blur(0px);
+}
+.hidden-texthidden-text-background.hidden-texthidden-text-true:hover {
 	background: transparent;
 	color: inherit;
 	border-radius: 0px;
-	user-select: text;
+}
+.hidden-texthidden-text-false {
+    -webkit-user-select: none;
+    user-select: none;
 }
 /* 标签 */
 
