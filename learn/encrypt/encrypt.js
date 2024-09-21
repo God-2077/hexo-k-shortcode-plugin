@@ -1,5 +1,14 @@
 const CryptoJS = require('crypto-js');
 
+// function loadJs(jsUrl){
+//     let scriptTag = document.createElement('script');
+//     scriptTag.src = jsUrl;
+//     document.getElementsByTagName('head')[0].appendChild(scriptTag);
+// };
+
+// // 加载 CryptoJS 的浏览器版本，得到全局对象 CryptoJS
+// loadJs('https://cdn.bootcdn.net/ajax/libs/crypto-js/4.1.1/crypto-js.min.js');
+
 // 加密函数
 function encrypt(plaintext, key) {
     const keySHA256 = CryptoJS.SHA256(key).toString(CryptoJS.enc.Hex);

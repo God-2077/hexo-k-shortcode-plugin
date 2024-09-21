@@ -1,0 +1,54 @@
+<div class="k-encrypt">
+    <p class="text">
+        <i class="fa-regular fa-eye"></i>此处含有加密内容，需要正确输入密码后可见！
+    </p>
+    <form method="post" id="passwordForm">
+        <div class="input-k-encrypt">
+            <div class="encrypt">
+                <input type="password" placeholder="请输入密码" class="form-control form-control-k-encrypt" name="pass" id="passwordInput"/>
+            </div>
+            <div class="button-k-encrypt">
+                <label>
+                    <input type="checkbox" class="remember-me" id="rememberMe"/> 记住我
+                </label>
+                <button type="submit" class="btn btn-k-encrypt">解密</button>
+            </div>
+        </div>
+    </form>
+    <div id="message" class="text-danger"></div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const passwordInput = document.getElementById('passwordInput');
+    const rememberMeCheckbox = document.getElementById('rememberMe');
+
+    // 检查 localStorage 中是否有保存的密码
+    if (localStorage.getItem('rememberMe') === 'true') {
+        passwordInput.value = localStorage.getItem('savedPassword') || '';
+        rememberMeCheckbox.checked = true;
+    }
+
+    document.getElementById('passwordForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // 阻止表单提交
+        const password = passwordInput.value;
+        const messageDiv = document.getElementById('message');
+        
+        if (password === '123456') {
+            messageDiv.innerHTML = '<p class="text-success">密码正确！内容显示...</p>';
+            // 在这里可以显示隐藏内容的逻辑
+        } else {
+            messageDiv.innerHTML = '<p>您的密码输入错误，请核对后重新输入</p>';
+        }
+
+        // 如果勾选“记住我”，保存密码到 localStorage
+        if (rememberMeCheckbox.checked) {
+            localStorage.setItem('savedPassword', password);
+            localStorage.setItem('rememberMe', 'true');
+        } else {
+            localStorage.removeItem('savedPassword');
+            localStorage.setItem('rememberMe', 'false');
+        }
+    });
+});
+</script>
