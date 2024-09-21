@@ -1,32 +1,39 @@
+const CryptoJS = require('crypto-js');
 
-const crypto = require('crypto');
- 
- 
-function aesEncrypt(data, key, iv) {
-  const cipher = crypto.createCipheriv('aes-256-cbc', key, iv);
-  let encrypted = cipher.update(data, 'utf8', 'hex');
-  encrypted += cipher.final('hex');
-  return encrypted;
+// 加密函数
+function encrypt(plaintext, key) {
+    const keySHA256 = CryptoJS.SHA256(key).toString(CryptoJS.enc.Hex);
+    const iv = CryptoJS.lib.WordArray.random(32); // 生成随机IV
+    const encrypted = CryptoJS.AES.encrypt(plaintext, keySHA256, {
+        iv: iv,
+        mode: CryptoJS.mode.CBC,
+        padding: CryptoJS.pad.Pkcs7
+    });
+    // 返回IV和密文的组合
+    return iv.toString(CryptoJS.enc.Hex) + '::' + encrypted.toString();
 }
- 
- 
-function aesDecrypt(encrypted, key, iv) {
-  const decipher = crypto.createDecipheriv('aes-256-cbc', key, iv);
-  let decrypted = decipher.update(encrypted, 'hex', 'utf8');
-  decrypted += decipher.final('utf8');
-  return decrypted;
+
+// 解密函数
+function decrypt(combined, key) {
+    const keySHA256 = CryptoJS.SHA256(key).toString(CryptoJS.enc.Hex);
+    const parts = combined.split('::'); // 分割IV和密文
+    const iv = CryptoJS.enc.Hex.parse(parts[0]); // 解析IV
+    const encryptedText = parts[1]; // 获取密文
+
+    const decrypted = CryptoJS.AES.decrypt(encryptedText, keySHA256, {
+        iv: iv,
+        mode: CryptoJS.mode.CBC,
+        padding: CryptoJS.pad.Pkcs7
+    });
+
+    return decrypted.toString(CryptoJS.enc.Utf8); // 返回明文
 }
- 
- 
-const data = 'hello world';
-const key = crypto.randomBytes(32);     // 密钥，一个 Buffer 类
-const iv = crypto.randomBytes(16);      // 初始化向量，一个 Buffer 类
-const encrypted = aesEncrypt(data, key, iv);
-const decrypted = aesDecrypt(encrypted, key, iv);
- 
- 
-console.log(`原始数据: ${data}`);
-console.log(`密钥: ${key}`);
-console.log(`初始化向量: ${iv}`);
-console.log(`加密后的数据: ${encrypted}`);
-console.log(`解密后的数据: ${decrypted}`);
+
+// 示例
+let key = "12345 wrbwrWfb五八五八五八五6";
+let text = `666`;
+const encryptedCombined = encrypt(text, key);
+console.log("Encrypted:", encryptedCombined);
+
+const decryptedText = decrypt(encryptedCombined, key);
+console.log("Decrypted:", decryptedText);
