@@ -15,15 +15,15 @@ function kdebuglog(color,text) {
   }
 }
 // 全局页面字符串替换
-hexo.extend.filter.register('after_render:html', function (html) {
-  const kreplace = this.config.kreplace || [];
-  
-  kreplace.forEach(([search, replace]) => {
-    html = html.replace(new RegExp(search, 'g'), replace);
-  });
-
-  return html;
-});
+if (hexo.config.hexo_k_shortcode_plugin?.replace?.enable || false) {
+  kdebuglog("red","dav")
+  hexo.extend.filter.register('after_render:html', function (html) {
+    const kreplace = this.config.hexo_k_shortcode_plugin.replace.content || [];
+    kreplace.forEach(([search, replace]) => {
+      html = html.replace(new RegExp(search, 'g'), replace);
+    });
+    return html;
+});}
 
 // ------------------------------------------------------------------------------------------------------
 // 初始化
