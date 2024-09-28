@@ -5,13 +5,13 @@
 
 function kdebuglog(color,text) {
   if (color=='yellow') {
-    console.log('\x1B[33m%s\x1B[0m',text)
+    console.log('\x1B[33m%s\x1B[0m',"hexo_k_shortcode_plugin:",text)
   }
   if (color=='red') {
-    console.log('\x1B[31m%s\x1B[0m',text)
+    console.error('\x1B[31m%s\x1B[0m',"hexo_k_shortcode_plugin:",text)
   }
   if (color=='green') {
-    console.log('\x1B[32m%s\x1B[0m',text)
+    console.log('\x1B[32m%s\x1B[0m',"hexo_k_shortcode_plugin:",text)
   }
 }
 // 全局页面字符串替换
