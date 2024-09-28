@@ -38,11 +38,35 @@ function decrypt(combined, key) {
     return decrypted.toString(CryptoJS.enc.Utf8); // 返回明文
 }
 
+// 密码验证
+
+function passe(key) {
+    const text = key + "hexo-k-shortcode-plugin";
+    return CryptoJS.SHA256(text).toString(CryptoJS.enc.Hex)
+}
+function passd(key,keySHA256) {
+    const text = key + "hexo-k-shortcode-plugin";
+    const textSHA256 = CryptoJS.SHA256(text).toString(CryptoJS.enc.Hex);
+    if (textSHA256 === keySHA256){
+        return true
+    } else {
+        return false
+    }
+}
+
+
 // 示例
 let key = "12345 wrbwrWfb五八五八五八五6";
+const passea = passe(key);
 let text = `666`;
+
 const encryptedCombined = encrypt(text, key);
 console.log("Encrypted:", encryptedCombined);
 
-const decryptedText = decrypt(encryptedCombined, key);
-console.log("Decrypted:", decryptedText);
+
+if (passd("12345 wrbwrWfb五八五八五八五6",passea)){
+    const decryptedText = decrypt(encryptedCombined, key);
+    console.log("Decrypted:", decryptedText);
+} else {
+    console.log("password error.")
+}

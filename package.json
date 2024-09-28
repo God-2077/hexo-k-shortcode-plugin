@@ -4,21 +4,23 @@
     "description": "A shortcode plugin for Hexo",
     "main": "index.js",
     "scripts": {
-      "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "echo \"Info: no test specified\" && exit 0"
     },
     "repository": {
-      "type": "git",
-      "url": "git+https://github.com/God-2077/hexo-k-shortcode-plugin.git"
+        "type": "git",
+        "url": "git+https://github.com/God-2077/hexo-k-shortcode-plugin.git"
     },
     "keywords": [
-      "hexo",
-      "shortcode"
+        "hexo",
+        "shortcode"
     ],
     "author": "kissablecho",
     "license": "GPL-3.0",
     "bugs": {
-      "url": "https://github.com/God-2077/hexo-k-shortcode-plugin/issues"
+        "url": "https://github.com/God-2077/hexo-k-shortcode-plugin/issues"
     },
-    "homepage": "https://github.com/God-2077/hexo-k-shortcode-plugin#readme"
-  }
-  
+    "homepage": "https://github.com/God-2077/hexo-k-shortcode-plugin#readme",
+    "dependencies": {
+        "crypto-js": "^4.2.0"
+    }
+}

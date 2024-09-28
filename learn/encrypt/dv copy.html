@@ -1,0 +1,110 @@
+<div class="k-encrypt">
+    <p class="text">
+        <i class="fa-regular fa-eye"></i>此处含有加密内容，需要正确输入密码后可见！
+    </p>
+    <form method="post" id="passwordForm">
+        <div class="input-k-encrypt">
+            <div class="encrypt">
+                <input type="password" placeholder="请输入密码" class="form-control form-control-k-encrypt" name="pass" id="passwordInput"/>
+            </div>
+            <div class="button-k-encrypt">
+                <label>
+                    <input type="checkbox" class="remember-me" id="rememberMe"/> 记住我
+                </label>
+                <button type="submit" class="btn btn-k-encrypt">解密</button>
+            </div>
+        </div>
+    </form>
+    <div id="message" class="text-danger"></div>
+</div>
+
+<script>
+document.getElementById('passwordForm').addEventListener('submit', function(event) {
+    event.preventDefault(); // 阻止表单提交
+    const passwordInput = document.getElementById('passwordInput').value;
+    const messageDiv = document.getElementById('message');
+    
+    if (passwordInput === '123456') {
+        messageDiv.innerHTML = '<p class="text-success">密码正确！内容显示...</p>';
+        // 在这里可以显示隐藏内容的逻辑
+    } else {
+        messageDiv.innerHTML = '<p style="margin-top:10px;font-size:14px;text-align:center;color:#d9534f;">您的密码输入错误，请核对后重新输入</p>';
+    }
+});
+</script>
+<style>
+.k-encrypt {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.k-encrypt .text {
+    color: #333;
+    font-size: 16px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.k-encrypt i {
+    margin-right: 8px;
+    color: #007bff;
+}
+
+.k-encrypt .input-k-encrypt {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.k-encrypt .encrypt input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.k-encrypt .button-k-encrypt {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.k-encrypt .button-k-encrypt label {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: #666;
+}
+
+.k-encrypt .button-k-encrypt input[type="checkbox"] {
+    margin-right: 5px;
+}
+
+.k-encrypt .btn-k-encrypt {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.k-encrypt .btn-k-encrypt:hover {
+    background-color: #0056b3;
+}
+
+/* .text-danger {
+    margin-top: 10px;
+    font-size: 14px;
+    text-align: center;
+    color: #d9534f;
+} */
+
+</style>
