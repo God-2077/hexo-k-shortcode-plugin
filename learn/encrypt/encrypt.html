@@ -19,6 +19,55 @@
 </div>
 
 <script>
+
+
+
+
+// if (typeof kencryptyanzhen === 'function') {
+//     // console.log('函数已定义');
+// } else {
+    // console.log('函数未定义');
+function loadJs(jsUrl){
+    let scriptTag = document.createElement('script');
+    scriptTag.src = jsUrl;
+    document.getElementsByTagName('head')[0].appendChild(scriptTag);
+};
+// 加载 CryptoJS 的浏览器版本，得到全局对象 CryptoJS
+loadJs('https://cdn.bootcdn.net/ajax/libs/crypto-js/4.1.1/crypto-js.min.js');
+
+// 解密函数
+function decrypt(combined, key) {
+    const keySHA256 = CryptoJS.SHA256(key).toString(CryptoJS.enc.Hex);
+    const parts = combined.split('::'); // 分割IV和密文
+    const iv = CryptoJS.enc.Hex.parse(parts[0]); // 解析IV
+    const encryptedText = parts[1]; // 获取密文
+
+    const decrypted = CryptoJS.AES.decrypt(encryptedText, keySHA256, {
+        iv: iv,
+        mode: CryptoJS.mode.CBC,
+        padding: CryptoJS.pad.Pkcs7
+    });
+
+    return decrypted.toString(CryptoJS.enc.Utf8); // 返回明文
+}
+
+// 密码验证
+
+function passdyanzhen(key,keySHA256) {
+    console.log(key,keySHA256)
+    const text = key + "hexo-k-shortcode-plugin";
+    const textSHA256 = CryptoJS.SHA256(text).toString(CryptoJS.enc.Hex);
+    console.log(text,textSHA256)
+    if (textSHA256 === keySHA256){
+        return true
+    } else {
+        return false
+    }
+}
+function kencryptyanzhen(){return true}
+
+
+
 document.addEventListener('DOMContentLoaded', function() {
     const passwordInput = document.getElementById('passwordInput');
     const rememberMeCheckbox = document.getElementById('rememberMe');
@@ -34,12 +83,24 @@ document.addEventListener('DOMContentLoaded', function() {
         const password = passwordInput.value;
         const messageDiv = document.getElementById('message');
         
-        if (password === '123456') {
-            messageDiv.innerHTML = '<p class="text-success">密码正确！内容显示...</p>';
-            // 在这里可以显示隐藏内容的逻辑
+        // if (password === '123456') {
+        //     messageDiv.innerHTML = '<p class="text-success">密码正确！内容显示...</p>';
+        //     // 在这里可以显示隐藏内容的逻辑
+        // } else {
+        //     messageDiv.innerHTML = '<p>您的密码输入错误，请核对后重新输入</p>';
+        // }
+
+        // 解密
+
+        const passeyanzhen = "b4fb76095d69aa8bc392f48da4d9c148e3e42215f20cda117c2d23e81d8a68c2"; // 11111111111111111
+        const encryptedCombined = "d90564f59bbb627971da43dd1936dd89a7a526433917aecdd6bb273efd23f971::U2FsdGVkX1+VAYrHMdq7S5S7QxIQGK1mygAnol1jaIc=";
+        if (passdyanzhen(password,passeyanzhen)){
+            const decryptedText = decrypt(encryptedCombined, key);
+            messageDiv.innerHTML = decryptedText
         } else {
-            messageDiv.innerHTML = '<p>您的密码输入错误，请核对后重新输入</p>';
+            messageDiv.innerHTML = '<p style="margin-top:10px;font-size:14px;text-align:center;color:#d9534f;">您的密码输入错误，请核对后重新输入</p>';
         }
+        
 
         // 如果勾选“记住我”，保存密码到 localStorage
         if (rememberMeCheckbox.checked) {
@@ -52,3 +113,79 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
+<style>
+.k-encrypt {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.k-encrypt .text {
+    color: #333;
+    font-size: 16px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.k-encrypt i {
+    margin-right: 8px;
+    color: #007bff;
+}
+
+.k-encrypt .input-k-encrypt {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.k-encrypt .encrypt input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.k-encrypt .button-k-encrypt {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.k-encrypt .button-k-encrypt label {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: #666;
+}
+
+.k-encrypt .button-k-encrypt input[type="checkbox"] {
+    margin-right: 5px;
+}
+
+.k-encrypt .btn-k-encrypt {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.k-encrypt .btn-k-encrypt:hover {
+    background-color: #0056b3;
+}
+
+/* .text-danger {
+    margin-top: 10px;
+    font-size: 14px;
+    text-align: center;
+    color: #d9534f;
+} */
+
+</style>
