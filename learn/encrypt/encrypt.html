@@ -1,6 +1,6 @@
 <div class="k-encrypt">
     <p class="text">
-        <i class="fa-regular fa-eye"></i>此处含有加密内容，需要正确输入密码后可见！
+        此处含有加密内容，需要正确输入密码后可见！
     </p>
     <div method="post" id="passwordForm">
         <div class="input-k-encrypt">
@@ -20,15 +20,9 @@
 </div>
 
 <script>
-
-// document.querySelectorAll('.container')[0].addEventListener("click",function() {
-// console.log("fgmn")     
-//  })
-
-
-// if (typeof kencryptyanzhen === 'function') {
-//     // console.log('函数已定义');
-// } else {
+if (typeof kencryptyanzhen === 'function') {
+    // console.log('函数已定义');
+} else {
     // console.log('函数未定义');
 function loadJs(jsUrl){
     let scriptTag = document.createElement('script');
@@ -41,21 +35,18 @@ loadJs('https://cdn.bootcdn.net/ajax/libs/crypto-js/4.1.1/crypto-js.min.js');
 // 解密函数
 function decrypt(combined, key) {
     const keySHA256 = CryptoJS.SHA256(key).toString(CryptoJS.enc.Hex);
-    const parts = combined.split('::'); // 分割IV和密文
-    const iv = CryptoJS.enc.Hex.parse(parts[0]); // 解析IV
-    const encryptedText = parts[1]; // 获取密文
-
+    const parts = combined.split('::');
+    const iv = CryptoJS.enc.Hex.parse(parts[0]);
+    const encryptedText = parts[1];
     const decrypted = CryptoJS.AES.decrypt(encryptedText, keySHA256, {
         iv: iv,
         mode: CryptoJS.mode.CBC,
         padding: CryptoJS.pad.Pkcs7
     });
-
-    return decrypted.toString(CryptoJS.enc.Utf8); // 返回明文
+    return decrypted.toString(CryptoJS.enc.Utf8);
 }
 
 // 密码验证
-
 function passdyanzhen(key,keySHA256) {
     console.log(key,keySHA256)
     const text = key + "hexo-k-shortcode-plugin";
@@ -68,12 +59,9 @@ function passdyanzhen(key,keySHA256) {
     }
 }
 function kencryptyanzhen(){return true}
-// }
-
-
+}
 document.addEventListener('DOMContentLoaded', function() {
-
-    
+    const passwordInput = document.getElementById('passwordInput');
     // 检查 localStorage 中是否有保存的密码
     if (localStorage.getItem('rememberMe') === 'true') {
         passwordInput.value = localStorage.getItem('savedPassword') || '';
@@ -81,7 +69,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     // 监听“记住我”
     document.getElementById("rememberMe").addEventListener('change',function(){
-        // 如果勾选“记住我”，保存密码到 localStorage
         if (this.checked) {
             localStorage.setItem('savedPassword', document.getElementById('passwordInput').value);
             localStorage.setItem('rememberMe', 'true');
@@ -90,26 +77,11 @@ document.addEventListener('DOMContentLoaded', function() {
             localStorage.setItem('rememberMe', 'false');
         }
     })
-
-    const passwordInput = document.getElementById('passwordInput');
-
-
     // 点击解密
     document.getElementById('submit').addEventListener('click', function(event) {
-        // event.preventDefault(); // 阻止表单提交
         const password = passwordInput.value;
         const messageDiv = document.getElementById('message');
-        
-        // if (password === '123456') {
-        //     messageDiv.innerHTML = '<p class="text-success">密码正确！内容显示...</p>';
-        //     // 在这里可以显示隐藏内容的逻辑
-        // } else {
-        //     messageDiv.innerHTML = '<p>您的密码输入错误，请核对后重新输入</p>';
-        // }
-
-        // 解密
-
-        const passeyanzhen = "b4fb76095d69aa8bc392f48da4d9c148e3e42215f20cda117c2d23e81d8a68c2"; // 11111111111111111
+        const passeyanzhen = "b4fb76095d69aa8bc392f48da4d9c148e3e42215f20cda117c2d23e81d8a68c2";
         const encryptedCombined = "6539dd247dc58c17e1c0b1a1a14490c1bf0b59124c4f8ca4744b5bfbd6a76338::U2FsdGVkX1/XGKAag5C20csn9u9TTKIVB2qekrqN6bLA6JAQUj2ASePgSU03mXS9qWX9qfi/iZXkdVPVk6HjkNhCSkjRoR5m9NDtP4nfiquzHMinlWr6JTZxuFvdQcBMkkgYBOEcsnXsqu4z5zZyMQ==";
         if (passdyanzhen(password,passeyanzhen)){
             const decryptedText = decrypt(encryptedCombined, password);
@@ -117,8 +89,6 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
             messageDiv.innerHTML = '<p style="margin-top:10px;font-size:14px;text-align:center;color:#d9534f;">您的密码输入错误，请核对后重新输入</p>';
         }
-        
-
     });
 });
 </script>
