@@ -58,15 +58,21 @@ function passd(key,keySHA256) {
 // 示例
 let key = "12345 wrbwrWfb五八五八五八五6";
 const passea = passe(key);
-let text = `666`;
+let text = `<p>这个<br>段落<br>演示了分行的效果</p><ul>
+<li>Coffee</li>
+<li>Milk</li>
+</ul>`;
+
+console.log("密码：",key)
+console.log("密码验证：", passea)
 
 const encryptedCombined = encrypt(text, key);
-console.log("Encrypted:", encryptedCombined);
+console.log("密文:", encryptedCombined);
 
 
 if (passd("12345 wrbwrWfb五八五八五八五6",passea)){
     const decryptedText = decrypt(encryptedCombined, key);
-    console.log("Decrypted:", decryptedText);
+    console.log("解密后:", decryptedText);
 } else {
     console.log("password error.")
 }
