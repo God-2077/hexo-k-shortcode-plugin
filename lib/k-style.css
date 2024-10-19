@@ -63,3 +63,80 @@
     color: #ff3709;
     background-color: rgba(203, 210, 246, .5);
 }
+
+/* 内容加密 */
+
+.k-encrypt {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    /* max-width: 400px; */
+    margin: 0 auto;
+  }
+  
+  .k-encrypt .text {
+    color: #333;
+    font-size: 16px;
+    margin-bottom: 15px;
+    text-align: center;
+  }
+  
+  .k-encrypt i {
+    margin-right: 8px;
+    color: #007bff;
+  }
+  
+  .k-encrypt .input-k-encrypt {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .k-encrypt .encrypt input {
+    width: 95%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+  
+  .k-encrypt .button-k-encrypt {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .k-encrypt .button-k-encrypt label {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: #666;
+  }
+  
+  .k-encrypt .button-k-encrypt input[type="checkbox"] {
+    margin-right: 5px;
+  }
+  
+  .k-encrypt .btn-k-encrypt {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .k-encrypt .btn-k-encrypt:hover {
+    background-color: #0056b3;
+  }
+  
+  /* .text-danger {
+    margin-top: 10px;
+    font-size: 14px;
+    text-align: center;
+    color: #d9534f;
+  } */
+  

@@ -1,6 +1,6 @@
 {
   "name": "hexo-k-shortcode-plugin",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "description": "A shortcode plugin for Hexo",
   "main": "index.js",
   "scripts": {
@@ -19,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/God-2077/hexo-k-shortcode-plugin/issues"
   },
-  "homepage": "https://github.com/God-2077/hexo-k-shortcode-plugin#readme"
+  "homepage": "https://github.com/God-2077/hexo-k-shortcode-plugin#readme",
+  "dependencies": {
+    "crypto-js": "^4.2.0"
+  }
 }

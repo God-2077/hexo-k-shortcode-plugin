@@ -92,3 +92,29 @@ npm install hexo-k-shortcode-plugin --save
 ![image](https://github.com/user-attachments/assets/2cea7cca-7c01-44db-b79d-e9979cdc5ff1)
 
 
+
+### 内容加密（实验性）
+
+#### 介绍
+
+该短代码可以加密一段文本。
+
+#### 用法
+
+```md
+{% kencrypt 参数名:参数%}
+```
+
+#### 参数
+
+| 参数名 | 可选值          | 默认值 | 解释                       | 是否必须 |
+| ------ | --------------- | ------ | -------------------------- | -------- |
+| password   | string | 123456   | 密码     | 是       |
+
+#### 示例
+
+```md
+{% kencrypt password:123456 %} 
+嗯~ o(*￣▽￣*)o，我喜欢你
+{% endkencrypt %}
+```
