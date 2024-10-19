@@ -1,20 +1,70 @@
 'use strict';
+const CryptoJS = require('crypto-js');
+// ------------------------------------------------------------------------------------------------------
+// 辅助函数
 
-// 所有的标签
-const specifiedTags = ['hidden'];
+function kdebuglog(color,text) {
+  if (color=='yellow') {
+    console.log('\x1B[33m%s\x1B[0m',text)
+  }
+  if (color=='red') {
+    console.log('\x1B[31m%s\x1B[0m',text)
+  }
+  if (color=='green') {
+    console.log('\x1B[32m%s\x1B[0m',text)
+  }
+}
+// 全局页面字符串替换
+if (hexo.config.hexo_k_shortcode_plugin?.replace?.enable || false) {
+  kdebuglog("red","dav")
+  hexo.extend.filter.register('after_render:html', function (html) {
+    const kreplace = this.config.hexo_k_shortcode_plugin.replace.content || [];
+    kreplace.forEach(([search, replace]) => {
+      html = html.replace(new RegExp(search, 'g'), replace);
+    });
+    return html;
+});}
+
+// 加密函数
+function cencrypt(plaintext, key) {
+  const keySHA256 = CryptoJS.SHA256(key).toString(CryptoJS.enc.Hex);
+  const iv = CryptoJS.lib.WordArray.random(32); // 生成随机IV
+  const encrypted = CryptoJS.AES.encrypt(plaintext, keySHA256, {
+      iv: iv,
+      mode: CryptoJS.mode.CBC,
+      padding: CryptoJS.pad.Pkcs7
+  });
+  // 返回IV和密文的组合
+  return iv.toString(CryptoJS.enc.Hex) + '::' + encrypted.toString();
+}
+
+// 密码验证
+function passe(key) {
+  const text = key + "hexo-k-shortcode-plugin";
+  return CryptoJS.SHA256(text).toString(CryptoJS.enc.Hex)
+}
+
+// ------------------------------------------------------------------------------------------------------
+// 初始化
+
+let kdebug = hexo.config.hexo_k_shortcode_plugin?.debug || false;
+if (kdebug){
+  kdebuglog('green',`hexo-k-shortcode-plugin-debug:${kdebug}`)
+}
 
 // ---------------------------------------------------------------------------------------------------------------
 
 // 标签主函数
 
 // 隐藏文本
-// {% hidden 这世界就是个错误！ type:blur title:字符串 %} 
+// {% hidden 这世界就是个错误！ type:blur title:字符串 show:true %} 
 
 function hidden(args) {
   let content = ""; // 用来存储标签内容
   let params = {
     type: "blur", // 默认值
-    title: ""
+    title: "",
+    show: "true"
   };
   
   // 遍历 args 数组
@@ -34,21 +84,265 @@ function hidden(args) {
   let contentText = content.trim();
   let type = params.type;
   let title = params.title;
+  let show = params.show
 
   if (type != "blur" && type != "background") {
-    console.log('\x1B[31m%s\x1B[0m', `hexo-k-shortcode: khide type ERROR，type=${type}`);
-    return `hidden type ERROR `;
+    kdebuglog('red', `hexo-k-shortcode: hidden parameter type ERROR, type=${type}`);
+    return `hexo-k-shortcode: hidden parameter type ERROR, type=${type}`;
   }
-  console.log('\x1B[31m%s\x1B[0m', `hexo-k-shortcode: type=${type}`);
-  return `<span class="hidden-text hidden-texthidden-text-${type}" title="${title}">${contentText}</span>`;
+  if (show != "true" && show != "false") {
+    kdebuglog('red', `hexo-k-shortcode: hidden parameter show ERROR, show=${show}`);
+    return `hexo-k-shortcode: hidden parameter show ERROR, show=${show}`;
+  }
+
+  if (kdebug){kdebuglog('green', `hexo-k-shortcode: hidden contentText=${contentText}, type=${type}, title=${title}, show=${show}`);}
+  return `<span class="hidden-text hidden-texthidden-text-${type} hidden-texthidden-text-${show}" title="${title}">${contentText}</span>`;
 }
+
+// 标签
+// {% label 标签 color:indigo shape:round %}
+
+function label(args){
+  let content = "";
+  let params = {
+    color: "indigo",
+    shape: "square"
+  };
+  args.forEach((arg) => {
+    if (arg.includes(":")) {
+      let [key, value] = arg.split(":");
+      if (key && value) {
+        params[key] = value;
+      }
+    } else if (!content) {
+      content = arg;
+    }
+  });
+  let contentText = content.trim();
+  let color = params.color;
+  let shape =params.shape;
+
+  const arcolor = ["indigo","green","red","blue","orange",];
+  const arshape = ["square","round"];
+  if (!arcolor.includes(color)) {
+    kdebuglog('red', `hexo-k-shortcode: label parameter color ERROR, color=${color}`);
+    return `hexo-k-shortcode: label parameter color ERROR, color=${color}`
+  }
+  if (!arshape.includes(shape)) {
+    kdebuglog('red', `hexo-k-shortcode: label parameter shape ERROR, color=${shape}`);
+    return `hexo-k-shortcode: label parameter shape ERROR, color=${shape}`
+  }
+
+  if (kdebug){kdebuglog('\x1B[31m%s\x1B[0m', `hexo-k-shortcode: label contentText=${contentText}, color=${color}, shape=${shape},`);}
+  return `<span class="label label-color-${color} label-color-${shape}">${contentText}</span>`
+}
+
+
+function kencrypt(args,content){
+  let text = hexo.render.renderSync({ text: content, engine: 'markdown' });
+  let params = {
+  password: "123456"
+  };
+
+  args.forEach((arg) => {
+  if (arg.includes(":")) {
+      let [key, value] = arg.split(":");
+      if (key && value) {
+      params[key] = value;
+      }
+  }
+  });
+
+  let password = params.password;
+  const UUID = crypto.randomUUID();
+  const encrypttext = cencrypt(text,password);
+  const passeyanzhen = passe(password);
+  const rememberMeid = 'k-encrypt-rememberMe-' + UUID
+  const submitid = 'k-encrypt-submit-' + UUID
+  const passwordInputid = 'k-encrypt-passwordInput-' + UUID
+  const messageid = 'k-encrypt-message-' + UUID
+
+  return `<div class="k-encrypt">
+  <p class="text">
+      此处含有加密内容，需要正确输入密码后可见！
+  </p>
+  <div method="post" id="passwordForm">
+      <div class="input-k-encrypt">
+          <div class="encrypt">
+              <input type="password" placeholder="请输入密码" class="form-control form-control-k-encrypt" name="pass" id="${passwordInputid}"/>
+          </div>
+          <div class="button-k-encrypt">
+              <label>
+                  <input type="checkbox" class="remember-me" id="${rememberMeid}"/> 记住我
+              </label>
+              <button type="submit" class="btn btn-k-encrypt" id="${submitid}">解密</button>
+          </div>
+      </div>
+  </div>
+  <hr style="border-top: 1px dashed #8c8b8b" />
+  <div id="${messageid}" class="text-danger"></div>
+</div>
+<script>
+if (typeof kencryptyanzhen === 'function') {
+  // console.log('函数已定义');
+} else {
+  // console.log('函数未定义');
+function loadJs(jsUrl){
+  let scriptTag = document.createElement('script');
+  scriptTag.src = jsUrl;
+  document.getElementsByTagName('head')[0].appendChild(scriptTag);
+};
+// 加载 CryptoJS 的浏览器版本，得到全局对象 CryptoJS
+loadJs('https://cdn.bootcdn.net/ajax/libs/crypto-js/4.1.1/crypto-js.min.js');
+
+// 解密函数
+function decrypt(combined, key) {
+  const keySHA256 = CryptoJS.SHA256(key).toString(CryptoJS.enc.Hex);
+  const parts = combined.split('::');
+  const iv = CryptoJS.enc.Hex.parse(parts[0]);
+  const encryptedText = parts[1];
+  const decrypted = CryptoJS.AES.decrypt(encryptedText, keySHA256, {
+      iv: iv,
+      mode: CryptoJS.mode.CBC,
+      padding: CryptoJS.pad.Pkcs7
+  });
+  return decrypted.toString(CryptoJS.enc.Utf8);
+}
+
+// 密码验证
+function passdyanzhen(key,keySHA256) {
+  console.log("1",key,keySHA256)
+  const text = key + "hexo-k-shortcode-plugin";
+  const textSHA256 = CryptoJS.SHA256(text).toString(CryptoJS.enc.Hex);
+  console.log("2",text,textSHA256)
+  if (textSHA256 === keySHA256){
+      return true
+  } else {
+      return false
+  }
+}
+function kencryptyanzhen(){return true}
+}
+document.addEventListener('DOMContentLoaded', function() {
+  const passwordInput = document.getElementById('${passwordInputid}');
+  // 检查 localStorage 中是否有保存的密码
+  if (localStorage.getItem('${rememberMeid}') === 'true') {
+      passwordInput.value = localStorage.getItem('savedPassword') || '';
+      document.getElementById('${rememberMeid}').checked = true;
+  }
+  // 监听“记住我”
+  document.getElementById("${rememberMeid}").addEventListener('change',function(){
+      if (this.checked) {
+          localStorage.setItem('savedPassword', document.getElementById('${passwordInputid}').value);
+          localStorage.setItem('${rememberMeid}', 'true');
+      } else {
+          localStorage.removeItem('savedPassword');
+          localStorage.setItem('${rememberMeid}', 'false');
+      }
+  })
+  // 点击解密
+  document.getElementById('${submitid}').addEventListener('click', function(event) {
+      const password = passwordInput.value;
+      const messageDiv = document.getElementById('${messageid}');
+      const passeyanzhen = "${passeyanzhen}";
+      const encryptedCombined = "${encrypttext}";
+      if (passdyanzhen(password,passeyanzhen)){
+          const decryptedText = decrypt(encryptedCombined, password);
+          messageDiv.innerHTML = decryptedText
+      } else {
+          messageDiv.innerHTML = '<p style="margin-top:10px;font-size:14px;text-align:center;color:#d9534f;">您的密码输入错误，请核对后重新输入</p>';
+      }
+  });
+});
+</script>
+<style>
+.k-encrypt {
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.k-encrypt .text {
+  color: #333;
+  font-size: 16px;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.k-encrypt i {
+  margin-right: 8px;
+  color: #007bff;
+}
+
+.k-encrypt .input-k-encrypt {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.k-encrypt .encrypt input {
+  width: 95%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.k-encrypt .button-k-encrypt {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.k-encrypt .button-k-encrypt label {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  color: #666;
+}
+
+.k-encrypt .button-k-encrypt input[type="checkbox"] {
+  margin-right: 5px;
+}
+
+.k-encrypt .btn-k-encrypt {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.k-encrypt .btn-k-encrypt:hover {
+  background-color: #0056b3;
+}
+
+/* .text-danger {
+  margin-top: 10px;
+  font-size: 14px;
+  text-align: center;
+  color: #d9534f;
+} */
+
+</style>`
+
+}
+
+hexo.extend.tag.register("kencrypt", kencrypt, {ends: true});
 
 // -----------------------------------------------------------------------------------------------------------------------
 
 // 注入标签函数
-function tagfun(){
+
 hexo.extend.tag.register("hidden", hidden, {ends: false});
-}
+hexo.extend.tag.register("label", label, {ends: false});
+
 
 //------------------------------------------------------------------------------------------------------------------------
 // 注入 css
@@ -57,14 +351,6 @@ hexo.extend.tag.register("hidden", hidden, {ends: false});
 const path = require('path');
 const fs = require('fs');
 
-// 全局变量，用于存储是否存在指定的标签
-let hasTags = false;
-
-
-// 注册标签
-specifiedTags.forEach(tag => {
-  tagfun();
-});
 
 hexo.extend.filter.register('before_generate', function() {
   const srcPath = path.join(__dirname, 'lib/k-style.css');
@@ -77,24 +363,10 @@ hexo.extend.filter.register('before_generate', function() {
   fs.copyFileSync(srcPath, destPath);
 });
 
-hexo.extend.filter.register('after_render:html', function(str, data) {
-  if (hasTags) {
-    // 注入 CSS 链接到 </head> 之前
-    const cssLink = '<link rel="stylesheet" href="/css/k-style.css">';
-    str = str.replace('</head>', `${cssLink}\n</head>`);
-  }
+// 全局注入
 
-  return str;
-});
-
-// 检查页面是否包含指定的标签
-hexo.extend.filter.register('before_post_render', function(data) {
-  specifiedTags.forEach(tag => {
-    if (data.content.includes(`{% ${tag} `)) {
-      hasTags = true;
-      return false; // 结束循环
-    }
-  });
-
-  return data;
-});
+hexo.extend.injector.register(
+  "head_end", 
+  '<link rel="stylesheet" href="/css/k-style.css">',
+  "default"
+);
